@@ -1,0 +1,12 @@
+name: komodo
+
+services:
+  komodo:
+    build: .
+    container_name: zugsim-ansager
+    image: zugsim-ansager:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped

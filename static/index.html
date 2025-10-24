@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zug Ansagen Web</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div id="splash">
+      <div class="splash-content">
+        <img src="/static/logo.svg" alt="Zug Ansagen Logo" />
+        <p>Zug Ansagen werden vorbereitet…</p>
+        <div class="spinner" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <header>
+      <div class="brand">
+        <img src="/static/logo.svg" alt="Logo" />
+        <div>
+          <h1>Zug Ansagen</h1>
+          <p>Webbasierter Ansagen-Assistent</p>
+        </div>
+      </div>
+      <div class="controls">
+        <label class="toggle">
+          <input type="checkbox" id="auto-speak" checked />
+          <span>Auto-TTS im Browser</span>
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel upload-panel">
+        <h2>Strecke laden</h2>
+        <p class="hint">
+          Lade eine Textdatei hoch. Eine Station pro Zeile – der Rest erledigt die Website.
+        </p>
+        <label class="file-drop" id="dropzone">
+          <input type="file" id="file-input" accept=".txt" hidden />
+          <div class="icon">⬆︎</div>
+          <p><strong>Datei hier ablegen</strong> oder klicken, um zu wählen.</p>
+          <small>.txt Dateien, UTF-8 oder Latin-1</small>
+        </label>
+      </section>
+
+      <section class="panel status-panel">
+        <div class="status-header">
+          <h2 id="route-name">Noch keine Strecke geladen</h2>
+          <button id="reset" class="ghost" disabled>Zurücksetzen</button>
+        </div>
+        <div class="status-body">
+          <p id="status-message">Lade eine Strecke, um zu starten.</p>
+          <p id="next-station" class="next-station">Nächster Halt: –</p>
+        </div>
+        <div class="action-row">
+          <button id="play-next" disabled>Nächste Ansage</button>
+          <button id="repeat-last" class="secondary" disabled>Letzte wiederholen</button>
+        </div>
+      </section>
+
+      <section class="panel stations-panel">
+        <div class="panel-header">
+          <h2>Streckenverlauf</h2>
+          <span id="station-count">0 Stationen</span>
+        </div>
+        <ul id="stations" class="stations-list"></ul>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/static/app.js"></script>
+  </body>
+</html>
