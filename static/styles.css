@@ -215,6 +215,65 @@ button:disabled {
   min-height: 100%;
 }
 
+.manual-panel .panel-header span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.preset-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.preset-card {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.1rem;
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.preset-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateY(-1px);
+}
+
+.preset-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #f8fafc;
+}
+
+.preset-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.preset-card button {
+  justify-self: start;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #e0f2fe;
+  box-shadow: none;
+}
+
+.preset-card button:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.preset-placeholder {
+  color: var(--muted);
+  margin: 0;
+}
+
 .panel-header span {
   color: var(--muted);
   font-size: 0.95rem;

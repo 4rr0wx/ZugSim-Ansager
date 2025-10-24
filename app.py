@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -13,6 +13,56 @@ from fastapi.staticfiles import StaticFiles
 
 BASE_DIR = Path(__file__).parent
 STATIC_DIR = BASE_DIR / "static"
+
+PRESET_ANNOUNCEMENTS = [
+    {
+        "id": "doors-closing",
+        "title": "Bitte Türen schließen",
+        "description": "Hinweis zum Schließen der Türen vor der Abfahrt.",
+        "message": (
+            "Bitte schließen Sie die Türen. "
+            "Der Zug fährt in wenigen Augenblicken weiter. Vielen Dank."
+        ),
+    },
+    {
+        "id": "delay-info",
+        "title": "Verspätungsinformation",
+        "description": "Allgemeine Verzögerung durchgeben.",
+        "message": (
+            "Liebe Fahrgäste, aufgrund einer vor uns fahrenden Bahn "
+            "verzögert sich unsere Weiterfahrt um wenige Minuten. "
+            "Wir bitten um Ihr Verständnis."
+        ),
+    },
+    {
+        "id": "service-info",
+        "title": "Servicehinweis",
+        "description": "Service- oder Bordgastronomie ankündigen.",
+        "message": (
+            "Liebe Fahrgäste, der mobile Bordservice kommt gleich durch den Zug. "
+            "Wir bieten Ihnen Getränke, Snacks und kleine Speisen an."
+        ),
+    },
+    {
+        "id": "connection-info",
+        "title": "Anschlusszüge",
+        "description": "Anschlussmöglichkeiten ankündigen.",
+        "message": (
+            "Sehr geehrte Fahrgäste, am nächsten Bahnhof bestehen "
+            "Anschlüsse an regionale und überregionale Züge. "
+            "Bitte beachten Sie die aktuellen Anzeigen am Bahnsteig."
+        ),
+    },
+    {
+        "id": "security-note",
+        "title": "Sicherheitsdurchsage",
+        "description": "Allgemeiner Sicherheitshinweis.",
+        "message": (
+            "Bitte achten Sie auf Ihr Gepäck und melden Sie Unregelmäßigkeiten "
+            "unserem Zugpersonal. Wir wünschen weiterhin eine angenehme Fahrt."
+        ),
+    },
+]
 
 
 @dataclass
@@ -178,6 +228,11 @@ async def get_state() -> dict:
         return serialize_state()
 
 
+@app.get("/api/presets")
+async def get_presets() -> dict:
+    return {"presets": PRESET_ANNOUNCEMENTS}
+
+
 @app.post("/api/route")
 async def upload_route(file: UploadFile = File(...)) -> dict:
     data = await file.read()
@@ -210,6 +265,14 @@ async def repeat_message() -> dict:
         except RuntimeError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         return {"message": message}
+
+
+@app.post("/api/preset")
+async def trigger_preset(preset_id: str = Body(..., embed=True, alias="presetId")) -> dict:
+    preset = next((item for item in PRESET_ANNOUNCEMENTS if item["id"] == preset_id), None)
+    if not preset:
+        raise HTTPException(status_code=404, detail="Unbekannte Sonderansage.")
+    return {"message": preset["message"], "preset": preset}
 
 
 @app.post("/api/reset")

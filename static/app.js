@@ -5,6 +5,7 @@ const selectors = {
   nextStation: document.getElementById("next-station"),
   stationCount: document.getElementById("station-count"),
   stationsList: document.getElementById("stations"),
+  manualPresets: document.getElementById("manual-presets"),
   playNext: document.getElementById("play-next"),
   repeatLast: document.getElementById("repeat-last"),
   reset: document.getElementById("reset"),
@@ -19,6 +20,7 @@ const state = {
   nextStation: null,
   autoSpeak: true,
   lastMessage: null,
+  presets: [],
 };
 
 function speak(message) {
@@ -40,7 +42,7 @@ function showToast(text, variant = "info") {
 
 function setLoading(isLoading) {
   selectors.playNext.disabled = isLoading || !state.routeLoaded;
-  selectors.repeatLast.disabled = isLoading || !state.routeLoaded;
+  selectors.repeatLast.disabled = isLoading || !state.lastMessage;
   selectors.reset.disabled = isLoading || !state.routeLoaded;
 }
 
@@ -98,6 +100,49 @@ async function fetchState() {
   updateUi(data);
 }
 
+function renderPresets() {
+  const container = selectors.manualPresets;
+  if (!state.presets.length) {
+    container.replaceChildren();
+    const placeholder = document.createElement("p");
+    placeholder.className = "preset-placeholder";
+    placeholder.textContent = "Keine Sonderansagen verfügbar.";
+    container.append(placeholder);
+    return;
+  }
+
+  const cards = state.presets.map((preset) => {
+    const card = document.createElement("article");
+    card.className = "preset-card";
+
+    const title = document.createElement("h3");
+    title.textContent = preset.title;
+
+    const description = document.createElement("p");
+    description.textContent = preset.description;
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "Abspielen";
+    button.addEventListener("click", () => triggerPreset(preset.id));
+
+    card.append(title, description, button);
+    return card;
+  });
+
+  container.replaceChildren(...cards);
+}
+
+async function fetchPresets() {
+  const response = await fetch("/api/presets");
+  if (!response.ok) {
+    throw new Error("Standardansagen konnten nicht geladen werden.");
+  }
+  const data = await response.json();
+  state.presets = data.presets ?? [];
+  renderPresets();
+}
+
 async function handleUpload(file) {
   const form = new FormData();
   form.append("file", file);
@@ -134,6 +179,29 @@ async function triggerNext() {
     showToast(error.message, "error");
   } finally {
     setLoading(false);
+  }
+}
+
+async function triggerPreset(presetId) {
+  try {
+    const response = await fetch("/api/preset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ presetId }),
+    });
+    if (!response.ok) {
+      const detail = await response.json().catch(() => ({}));
+      throw new Error(detail?.detail ?? "Sonderansage konnte nicht abgespielt werden.");
+    }
+    const payload = await response.json();
+    const message = payload.message;
+    state.lastMessage = message;
+    selectors.statusMessage.textContent = message;
+    selectors.repeatLast.disabled = false;
+    speak(message);
+    showToast(payload?.preset?.title ?? "Sonderansage abgespielt", "success");
+  } catch (error) {
+    showToast(error.message, "error");
   }
 }
 
@@ -209,13 +277,13 @@ selectors.dropzone.addEventListener("drop", async (event) => {
 });
 
 async function init() {
-  try {
-    await fetchState();
-  } catch (error) {
-    showToast(error.message, "error");
-  } finally {
-    selectors.splash.classList.add("hidden");
-  }
+  const results = await Promise.allSettled([fetchState(), fetchPresets()]);
+  results.forEach((result) => {
+    if (result.status === "rejected") {
+      showToast(result.reason?.message ?? "Initialisierung fehlgeschlagen", "error");
+    }
+  });
+  selectors.splash.classList.add("hidden");
 }
 
 document.addEventListener("DOMContentLoaded", init);

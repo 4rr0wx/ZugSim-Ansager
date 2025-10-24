@@ -6,6 +6,7 @@ Moderne Web-App für Browser, mit der Zugansagen aus einer Streckenliste gestart
 
 - Upload von Strecken (*.txt) – eine Station pro Zeile.
 - Automatische Zusatzansagen (Willkommen, Endstation, Abschluss).
+- Manuell triggerbare Standardtexte (z. B. Türen schließen, Verspätung, Service).
 - Minimalistische Oberfläche mit Dark/Light Unterstützung, Splash Screen, Logo & Favicon.
 - Browser-internes TTS (abschaltbar), keine lokalen Hotkeys mehr notwendig.
 - REST API (`/api/...`) zur Fernsteuerung der Ansagen.
@@ -58,6 +59,8 @@ Der Webserver steht danach unter `http://localhost:8000` bereit.
 - `POST /api/next` – erzeugt nächste Ansage, liefert Text und aktualisierten Status.
 - `POST /api/repeat` – wiederholt den letzten Ansagetext.
 - `POST /api/reset` – setzt den Zustand zurück.
+- `GET /api/presets` – verfügbare Sonderansagen (ID, Titel, Beschreibung).
+- `POST /api/preset` – Sonderansage per ID abspielen (`{"presetId": "..."}`).
 
 ## Lizenz
 
