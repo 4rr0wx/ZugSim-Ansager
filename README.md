@@ -62,6 +62,27 @@ Der Webserver steht danach unter `http://localhost:8000` bereit.
 - `GET /api/presets` – verfügbare Sonderansagen (ID, Titel, Beschreibung).
 - `POST /api/preset` – Sonderansage per ID abspielen (`{"presetId": "..."}`).
 
+## Beispielstrecken
+
+### Wiener Neustadt Hbf → Mürzzuschlag
+
+```text
+Wiener Neustadt Hbf
+St. Egyden
+Neunkirchen NÖ
+Ternitz
+Gloggnitz
+Schlögelmühl
+Payerbach-Reichenau
+Eichberg
+Breitenstein
+Wolfsbergkogel
+Semmering
+Spital am Semmering
+Steinhaus am Semmering
+Mürzzuschlag
+```
+
 ## Lizenz
 
 MIT – siehe `LICENSE` (falls vorhanden) oder projektspezifische Vereinbarung.
