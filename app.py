@@ -118,8 +118,8 @@ class AnnouncementManager:
             start = route.stations[0]
             end = route.stations[-1]
             text = (
-                f"Willkommen im Zug. Heute fahren wir von {start} nach {end}. "
-                "Bitte achten Sie auf Ihre Gepäckstücke und eine angenehme Fahrt."
+                f"Willkommen im Zug nach {end}."
+                "Bitte achten Sie auf Ihre Gepäckstücke und wir wünschen Ihnen eine angenehme Fahrt."
             )
             self._last_message = text
             return text
@@ -127,7 +127,7 @@ class AnnouncementManager:
         if len(route.stations) == 1:
             text = (
                 f"Wir erreichen in wenigen Augenblicken die Endstation {route.stations[0]}. "
-                "Bitte steigen Sie vorsichtig aus."
+                "Bitte steigen Sie aus. Vielen Dank, dass Sie mit uns gefahren sind."
             )
             self._finished = True
             self._last_message = text
@@ -146,7 +146,7 @@ class AnnouncementManager:
         if self._next_index == len(route.stations) - 1:
             text = (
                 f"Wir erreichen in wenigen Augenblicken die Endstation {station}. "
-                "Bitte nehmen Sie alle persönlichen Gegenstände mit."
+                "Bitte nehmen Sie alle persönlichen Gegenstände mit. Vielen Dank, dass Sie mit uns gefahren sind."
             )
             self._finished = True
         else:
