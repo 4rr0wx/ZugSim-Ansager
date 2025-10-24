@@ -1,6 +1,6 @@
 # Zug Ansagen Simulator
 
-Eine kleine Desktop-Anwendung fuer Windows, mit der sich Zugansagen fuer Strecken aus einer Textdatei abspielen lassen. Die App eignet sich als Begleiter fuer den Zugsimulator: Hotkeys feuern im Hintergrund die jeweils naechste Ansage ab.
+Moderne Desktop-App mit Flet (Material 3 UI) fuer Windows, mit der sich Zugansagen fuer Strecken aus einer Textdatei abspielen lassen. Ideal als Begleiter fuer den Zugsimulator: Globale Hotkeys feuern im Hintergrund die jeweils naechste Ansage ab.
 
 ## Features
 
@@ -28,6 +28,8 @@ Eine kleine Desktop-Anwendung fuer Windows, mit der sich Zugansagen fuer Strecke
 
 > **Hinweis:** Das `keyboard`-Modul benoetigt fuer globale Hotkeys unter Windows meist Administratorrechte. Starte das Terminal beziehungsweise die App bei Bedarf als Administrator.
 
+> Flet kann die App in einem eingebetteten Fenster oder Browser darstellen. Beim ersten Start koennen Firewall-Rueckfragen erscheinen, die lokalen Zugriff erlauben sollten.
+
 ## Strecken-Datei
 
 - Einfache Textdatei (`.txt`) mit UTF-8 oder Latin-1 Kodierung.
@@ -46,7 +48,7 @@ Frankfurt(Main) Hbf
 
 ## Bedienung
 
-1. App starten und ueber **"Strecke laden..."** die gewuenschte Textdatei auswaehlen.
+1. App starten und ueber **"Strecke laden..."** die gewuenschte Textdatei auswaehlen (Dateiendung `.txt`).
 2. Mit dem Button **"Naechste Ansage"** oder dem zugeordneten Hotkey die Ansagen abspielen.
 3. Die Liste zeigt stets den naechsten Halt. Die Statuszeile bestaetigt abgespielte Texte.
 4. Hotkeys lassen sich im unteren Bereich aendern; danach auf **"Hotkeys uebernehmen"** klicken.
