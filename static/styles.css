@@ -46,8 +46,11 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2.5rem 8vw 2rem;
+  padding: 2.5rem 6vw 2rem;
   gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 header h1 {
@@ -63,12 +66,27 @@ header p {
   font-size: 0.95rem;
 }
 
-main {
+main.layout {
   flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 2rem;
+  padding: 0 6vw;
+  align-items: start;
+}
+
+.column {
+  display: grid;
   gap: 1.5rem;
-  padding: 0 8vw 3rem;
+}
+
+.secondary {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
 }
 
 .brand {
@@ -212,7 +230,7 @@ button:disabled {
 }
 
 .stations-panel {
-  min-height: 100%;
+  min-height: 480px;
 }
 
 .manual-panel .panel-header span {
@@ -542,6 +560,17 @@ button:disabled {
   }
 }
 
+@media (max-width: 1100px) {
+  main.layout {
+    grid-template-columns: 1fr;
+    padding: 0 4vw;
+  }
+
+  .secondary {
+    position: static;
+  }
+}
+
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -549,7 +578,7 @@ button:disabled {
     padding: 2rem 6vw;
   }
 
-  main {
+  main.layout {
     padding: 0 6vw 3rem;
   }
 

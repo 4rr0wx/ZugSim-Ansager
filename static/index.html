@@ -34,52 +34,56 @@
       </div>
     </header>
 
-    <main>
-      <section class="panel upload-panel">
-        <h2>Strecke laden</h2>
-        <p class="hint">
-          Lade eine Textdatei hoch. Eine Station pro Zeile – der Rest erledigt die Website.
-        </p>
-        <label class="file-drop" id="dropzone">
-          <input type="file" id="file-input" accept=".txt" hidden />
-          <div class="icon">⬆︎</div>
-          <p><strong>Datei hier ablegen</strong> oder klicken, um zu wählen.</p>
-          <small>.txt Dateien, UTF-8 oder Latin-1</small>
-        </label>
-      </section>
+    <main class="layout">
+      <div class="column primary">
+        <section class="panel upload-panel">
+          <h2>Strecke laden</h2>
+          <p class="hint">
+            Lade eine Textdatei hoch. Eine Station pro Zeile – der Rest erledigt die Website.
+          </p>
+          <label class="file-drop" id="dropzone">
+            <input type="file" id="file-input" accept=".txt" hidden />
+            <div class="icon">⬆︎</div>
+            <p><strong>Datei hier ablegen</strong> oder klicken, um zu wählen.</p>
+            <small>.txt Dateien, UTF-8 oder Latin-1</small>
+          </label>
+        </section>
 
-      <section class="panel status-panel">
-        <div class="status-header">
-          <h2 id="route-name">Noch keine Strecke geladen</h2>
-          <button id="reset" class="ghost" disabled>Zurücksetzen</button>
-        </div>
-        <div class="status-body">
-          <p id="status-message">Lade eine Strecke, um zu starten.</p>
-          <p id="next-station" class="next-station">Nächster Halt: –</p>
-        </div>
-        <div class="action-row">
-          <button id="play-next" disabled>Nächste Ansage</button>
-          <button id="repeat-last" class="secondary" disabled>Letzte wiederholen</button>
-        </div>
-      </section>
+        <section class="panel status-panel">
+          <div class="status-header">
+            <h2 id="route-name">Noch keine Strecke geladen</h2>
+            <button id="reset" class="ghost" disabled>Zurücksetzen</button>
+          </div>
+          <div class="status-body">
+            <p id="status-message">Lade eine Strecke, um zu starten.</p>
+            <p id="next-station" class="next-station">Nächster Halt: –</p>
+          </div>
+          <div class="action-row">
+            <button id="play-next" disabled>Nächste Ansage</button>
+            <button id="repeat-last" class="secondary" disabled>Letzte wiederholen</button>
+          </div>
+        </section>
 
-      <section class="panel manual-panel">
-        <div class="panel-header">
-          <h2>Sonderansagen</h2>
-          <span>Manuell während der Fahrt</span>
-        </div>
-        <div id="manual-presets" class="preset-grid">
-          <p class="preset-placeholder">Lade Standardansagen…</p>
-        </div>
-      </section>
+        <section class="panel manual-panel">
+          <div class="panel-header">
+            <h2>Sonderansagen</h2>
+            <span>Manuell während der Fahrt</span>
+          </div>
+          <div id="manual-presets" class="preset-grid">
+            <p class="preset-placeholder">Lade Standardansagen…</p>
+          </div>
+        </section>
+      </div>
 
-      <section class="panel stations-panel">
-        <div class="panel-header">
-          <h2>Streckenverlauf</h2>
-          <span id="station-count">0 Stationen</span>
-        </div>
-        <ul id="stations" class="stations-list"></ul>
-      </section>
+      <div class="column secondary">
+        <section class="panel stations-panel">
+          <div class="panel-header">
+            <h2>Streckenverlauf</h2>
+            <span id="station-count">0 Stationen</span>
+          </div>
+          <ul id="stations" class="stations-list"></ul>
+        </section>
+      </div>
     </main>
 
     <div id="toast" role="status" aria-live="polite"></div>
