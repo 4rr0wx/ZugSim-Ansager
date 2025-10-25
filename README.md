@@ -7,6 +7,7 @@ Moderne Web-App für Browser, mit der Zugansagen aus einer Streckenliste gestart
 - Upload von Strecken (*.txt) – eine Station pro Zeile.
 - Automatische Zusatzansagen (Willkommen, Endstation, Abschluss).
 - Manuell triggerbare Standardtexte (z. B. Türen schließen, Verspätung, Service).
+- Realistische OpenAI TTS-Stimmen (optional, eigener API-Key pro Nutzer:in).
 - Minimalistische Oberfläche mit Dark/Light Unterstützung, Splash Screen, Logo & Favicon.
 - Browser-internes TTS (abschaltbar), keine lokalen Hotkeys mehr notwendig.
 - REST API (`/api/...`) zur Fernsteuerung der Ansagen.
@@ -61,6 +62,12 @@ Der Webserver steht danach unter `http://localhost:8000` bereit.
 - `POST /api/reset` – setzt den Zustand zurück.
 - `GET /api/presets` – verfügbare Sonderansagen (ID, Titel, Beschreibung).
 - `POST /api/preset` – Sonderansage per ID abspielen (`{"presetId": "..."}`).
+
+## OpenAI Stimmen
+
+- In den Einstellungen (Button „Einstellungen“) kann jede:r Nutzer:in einen persönlichen OpenAI API Key eintragen.
+- Der Key wird nur im Browser gehalten, niemals an den Server gesendet und verschwindet beim Schließen der Seite.
+- Auswahl verschiedener OpenAI Stimmen (`gpt-4o-mini-tts`) möglich. Ohne Key fällt die App automatisch auf die Browser-Stimme zurück.
 
 ## Beispielstrecken
 

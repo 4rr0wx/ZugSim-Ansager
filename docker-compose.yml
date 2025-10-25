@@ -1,10 +1,8 @@
-name: zug-ansager
-
 services:
-  komodo:
+  zugsim-ansager:
     build: .
-    container_name: zugsim-ansager
     image: zugsim-ansager:latest
+    container_name: zugsim-ansager
     ports:
       - "5003:8000"
     environment:

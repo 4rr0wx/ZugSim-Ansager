@@ -13,6 +13,14 @@ const selectors = {
   dropzone: document.getElementById("dropzone"),
   autoSpeak: document.getElementById("auto-speak"),
   toast: document.getElementById("toast"),
+  openSettings: document.getElementById("open-settings"),
+  closeSettings: document.getElementById("close-settings"),
+  cancelSettings: document.getElementById("cancel-settings"),
+  settingsModal: document.getElementById("settings-modal"),
+  settingsForm: document.getElementById("settings-form"),
+  openaiKey: document.getElementById("openai-key"),
+  voiceSelect: document.getElementById("voice-select"),
+  ttsModeRadios: document.querySelectorAll("input[name='tts-mode']"),
 };
 
 const state = {
@@ -21,16 +29,79 @@ const state = {
   autoSpeak: true,
   lastMessage: null,
   presets: [],
+  ttsMode: "browser", // "browser" | "openai"
+  openaiKey: "",
+  openaiVoice: "alloy",
+  currentAudio: null,
 };
 
-function speak(message) {
-  if (!state.autoSpeak || !("speechSynthesis" in window)) {
+function stopCurrentAudio() {
+  if (state.currentAudio) {
+    try {
+      state.currentAudio.pause();
+      state.currentAudio.src = "";
+    } catch (_) {
+      // ignore
+    }
+    state.currentAudio = null;
+  }
+}
+
+function speakWithBrowser(message) {
+  if (!("speechSynthesis" in window)) {
+    showToast("Browser unterstützt keine Sprachsynthese.", "error");
     return;
   }
+  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(message);
   utterance.lang = "de-DE";
-  window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
+}
+
+async function speakWithOpenAI(message) {
+  if (!state.openaiKey) {
+    throw new Error("Bitte OpenAI API Key hinterlegen.");
+  }
+  stopCurrentAudio();
+  const response = await fetch("https://api.openai.com/v1/audio/speech", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${state.openaiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini-tts",
+      voice: state.openaiVoice,
+      input: message,
+      format: "mp3",
+    }),
+  });
+  if (!response.ok) {
+    const detail = await response.json().catch(() => ({}));
+    throw new Error(detail?.error?.message ?? "OpenAI Ausgabe fehlgeschlagen.");
+  }
+  const arrayBuffer = await response.arrayBuffer();
+  const blob = new Blob([arrayBuffer], { type: "audio/mpeg" });
+  const url = URL.createObjectURL(blob);
+  const audio = new Audio(url);
+  state.currentAudio = audio;
+  audio.play().finally(() => {
+    URL.revokeObjectURL(url);
+  });
+}
+
+async function speak(message) {
+  if (!state.autoSpeak) {
+    return;
+  }
+  if (state.ttsMode === "openai" && state.openaiKey) {
+    await speakWithOpenAI(message);
+  } else if (state.ttsMode === "openai" && !state.openaiKey) {
+    showToast("Kein OpenAI Key hinterlegt – Browser-Stimme wird verwendet.", "error");
+    speakWithBrowser(message);
+  } else {
+    speakWithBrowser(message);
+  }
 }
 
 function showToast(text, variant = "info") {
@@ -174,7 +245,11 @@ async function triggerNext() {
     selectors.statusMessage.textContent = message;
     selectors.repeatLast.disabled = false;
     updateUi(payload.state);
-    speak(message);
+    try {
+      await speak(message);
+    } catch (error) {
+      showToast(error.message, "error");
+    }
   } catch (error) {
     showToast(error.message, "error");
   } finally {
@@ -198,7 +273,11 @@ async function triggerPreset(presetId) {
     state.lastMessage = message;
     selectors.statusMessage.textContent = message;
     selectors.repeatLast.disabled = false;
-    speak(message);
+    try {
+      await speak(message);
+    } catch (error) {
+      showToast(error.message, "error");
+    }
     showToast(payload?.preset?.title ?? "Sonderansage abgespielt", "success");
   } catch (error) {
     showToast(error.message, "error");
@@ -207,8 +286,12 @@ async function triggerPreset(presetId) {
 
 async function repeatLast() {
   if (!state.lastMessage) return;
-  speak(state.lastMessage);
-  showToast("Ansage wiederholt");
+  try {
+    await speak(state.lastMessage);
+    showToast("Ansage wiederholt");
+  } catch (error) {
+    showToast(error.message, "error");
+  }
 }
 
 async function resetRoute() {
@@ -237,6 +320,7 @@ selectors.autoSpeak.addEventListener("change", (event) => {
   state.autoSpeak = event.target.checked;
   if (!state.autoSpeak) {
     window.speechSynthesis.cancel();
+    stopCurrentAudio();
   }
 });
 
@@ -276,6 +360,42 @@ selectors.dropzone.addEventListener("drop", async (event) => {
   }
 });
 
+function openSettingsModal() {
+  selectors.settingsModal.classList.remove("hidden");
+  selectors.openaiKey.value = state.openaiKey;
+  selectors.voiceSelect.value = state.openaiVoice;
+  selectors.ttsModeRadios.forEach((radio) => {
+    radio.checked = radio.value === state.ttsMode;
+  });
+}
+
+function closeSettingsModal() {
+  selectors.settingsModal.classList.add("hidden");
+  selectors.settingsForm.reset();
+  selectors.openaiKey.value = state.openaiKey;
+  selectors.voiceSelect.value = state.openaiVoice;
+  selectors.ttsModeRadios.forEach((radio) => {
+    radio.checked = radio.value === state.ttsMode;
+  });
+}
+
+selectors.openSettings.addEventListener("click", openSettingsModal);
+selectors.closeSettings.addEventListener("click", closeSettingsModal);
+selectors.cancelSettings.addEventListener("click", closeSettingsModal);
+
+selectors.settingsForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formData = new FormData(selectors.settingsForm);
+  const mode = formData.get("tts-mode") === "openai" ? "openai" : "browser";
+  const key = selectors.openaiKey.value.trim();
+  const voice = selectors.voiceSelect.value;
+  state.ttsMode = mode;
+  state.openaiVoice = voice;
+  state.openaiKey = key;
+  showToast("Einstellungen aktualisiert", "success");
+  closeSettingsModal();
+});
+
 async function init() {
   const results = await Promise.allSettled([fetchState(), fetchPresets()]);
   results.forEach((result) => {
@@ -287,3 +407,8 @@ async function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+
+window.addEventListener("beforeunload", () => {
+  state.openaiKey = "";
+  stopCurrentAudio();
+});

@@ -389,6 +389,130 @@ button:disabled {
   visibility: hidden;
 }
 
+.settings-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.65);
+  z-index: 60;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-modal.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.settings-card {
+  width: min(520px, 92vw);
+  background: var(--card);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  display: grid;
+  gap: 1.25rem;
+  box-shadow: 0 30px 60px -30px rgba(15, 23, 42, 0.8);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #f8fafc;
+}
+
+.settings-header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.icon-button {
+  background: rgba(148, 163, 184, 0.1);
+  color: #f8fafc;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.icon-button:hover {
+  border-color: rgba(148, 163, 184, 0.4);
+  transform: translateY(0);
+}
+
+.field-group {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1rem 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field-group legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.radio-field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.radio-field input {
+  accent-color: var(--accent-strong);
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field span {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.field input,
+.field select {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.75rem 0.9rem;
+  background: rgba(15, 23, 42, 0.4);
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.field small {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
 .splash-content {
   display: grid;
   justify-items: center;

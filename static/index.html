@@ -28,8 +28,9 @@
       <div class="controls">
         <label class="toggle">
           <input type="checkbox" id="auto-speak" checked />
-          <span>Auto-TTS im Browser</span>
+          <span>Automatische Sprachausgabe</span>
         </label>
+        <button id="open-settings" class="ghost">Einstellungen</button>
       </div>
     </header>
 
@@ -82,6 +83,53 @@
     </main>
 
     <div id="toast" role="status" aria-live="polite"></div>
+
+    <div id="settings-modal" class="settings-modal hidden" role="dialog" aria-modal="true">
+      <form id="settings-form" class="settings-card">
+        <div class="settings-header">
+          <div>
+            <h2>Ausgabe & Stimmen</h2>
+            <p>OpenAI-Keys bleiben nur im Browser-Speicher und werden nie an den Server gesendet.</p>
+          </div>
+          <button type="button" id="close-settings" class="icon-button" aria-label="Schließen">
+            &times;
+          </button>
+        </div>
+
+        <fieldset class="field-group">
+          <legend>Text-to-Speech Engine</legend>
+          <label class="radio-field">
+            <input type="radio" name="tts-mode" value="browser" checked />
+            <span>Browser TTS (Web Speech API)</span>
+          </label>
+          <label class="radio-field">
+            <input type="radio" name="tts-mode" value="openai" />
+            <span>OpenAI TTS (API Key erforderlich)</span>
+          </label>
+        </fieldset>
+
+        <label class="field">
+          <span>OpenAI API Key</span>
+          <input type="password" id="openai-key" placeholder="sk-..." autocomplete="off" />
+          <small>Wird nur temporär im Browser gehalten. Nach dem Schließen der Seite ist der Key weg.</small>
+        </label>
+
+        <label class="field">
+          <span>OpenAI Stimme</span>
+          <select id="voice-select">
+            <option value="alloy">Alloy (neutral)</option>
+            <option value="verse">Verse (warm)</option>
+            <option value="aria">Aria (hell)</option>
+            <option value="cobalt">Cobalt (tief)</option>
+          </select>
+        </label>
+
+        <div class="settings-actions">
+          <button type="submit">Speichern</button>
+          <button type="button" id="cancel-settings" class="secondary">Abbrechen</button>
+        </div>
+      </form>
+    </div>
 
     <script type="module" src="/static/app.js"></script>
   </body>
