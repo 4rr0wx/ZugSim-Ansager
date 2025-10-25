@@ -6,6 +6,8 @@ const selectors = {
   stationCount: document.getElementById("station-count"),
   stationsList: document.getElementById("stations"),
   manualPresets: document.getElementById("manual-presets"),
+  uploadPanel: document.getElementById("upload-panel"),
+  uploadInline: document.getElementById("upload-inline"),
   playNext: document.getElementById("play-next"),
   repeatLast: document.getElementById("repeat-last"),
   reset: document.getElementById("reset"),
@@ -138,6 +140,14 @@ function updateStations(stations, active) {
 function updateUi(data) {
   state.routeLoaded = data.routeLoaded;
   state.nextStation = data.nextStation;
+
+  document.body.classList.toggle("has-route", data.routeLoaded);
+  if (selectors.uploadPanel) {
+    selectors.uploadPanel.hidden = false;
+  }
+  if (selectors.uploadInline) {
+    selectors.uploadInline.hidden = !data.routeLoaded;
+  }
 
   selectors.playNext.disabled = !data.routeLoaded;
   selectors.repeatLast.disabled = !state.lastMessage;
@@ -337,6 +347,7 @@ selectors.fileInput.addEventListener("change", async (event) => {
 });
 
 selectors.dropzone.addEventListener("click", () => selectors.fileInput.click());
+selectors.uploadInline?.addEventListener("click", () => selectors.fileInput.click());
 
 selectors.dropzone.addEventListener("dragover", (event) => {
   event.preventDefault();

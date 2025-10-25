@@ -30,13 +30,14 @@
           <input type="checkbox" id="auto-speak" checked />
           <span>Automatische Sprachausgabe</span>
         </label>
+        <button id="upload-inline" class="ghost" hidden>Strecke wechseln</button>
         <button id="open-settings" class="ghost">Einstellungen</button>
       </div>
     </header>
 
     <main class="layout">
       <div class="column primary">
-        <section class="panel upload-panel">
+        <section class="panel upload-panel" id="upload-panel">
           <h2>Strecke laden</h2>
           <p class="hint">
             Lade eine Textdatei hoch. Eine Station pro Zeile – der Rest erledigt die Website.

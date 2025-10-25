@@ -104,12 +104,12 @@ main.layout {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 18px;
-  padding: 1.75rem;
+  padding: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(26px);
+  backdrop-filter: blur(24px);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .panel h2 {
@@ -130,13 +130,13 @@ main.layout {
 
 .file-drop {
   border: 2px dashed var(--border);
-  border-radius: 16px;
-  padding: 2.25rem 1.5rem;
+  border-radius: 14px;
+  padding: 1.6rem 1.2rem;
   text-align: center;
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.2s ease;
   display: grid;
-  gap: 0.75rem;
+  gap: 0.55rem;
   justify-items: center;
 }
 
@@ -147,10 +147,10 @@ main.layout {
 }
 
 .file-drop .icon {
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: var(--accent);
   background: rgba(56, 189, 248, 0.12);
-  padding: 0.75rem 1.1rem;
+  padding: 0.5rem 0.9rem;
   border-radius: 999px;
 }
 
@@ -585,4 +585,21 @@ button:disabled {
   .stations-list {
     max-height: 260px;
   }
+}
+.upload-panel {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+body.has-route #upload-panel {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.controls button[hidden] {
+  display: none;
 }
